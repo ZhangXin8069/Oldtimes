@@ -1,0 +1,8 @@
+|    |    +--.gitignore
+|    |    +--download.iml
+|    |    +--encodings.xml
+|    |    +--inspectionProfiles
+|    |    +--inspectionProfiles.txt
+|    |    +--misc.xml
+|    |    +--modules.xml
+|    |    +--workspace.xml
