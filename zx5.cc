@@ -107,7 +107,7 @@ protected:
         }
     };
     void Calculate()
-    // Refer to https://zh.m.wikipedia.org/wiki/%E7%A8%B3%E5%AE%9A%E5%8F%8C%E5%85%B1%E8%BD%AD%E6%A2%AF%E5%BA%A6%E6%B3%95.
+    // Refer to https://zh.m.wikipedia.org/wiki/稳定双共轭梯度法.
     {
         loop += 1;
         double &proI = tmp4double;
@@ -219,7 +219,7 @@ private:
 };
 int main()
 {
-    biCGstab bi(1e5, 30, 1e-5);
+    biCGstab bi(1e6, 34, 1e-5);
     bi.Run();
     biCGstab::values2out values = bi._values2out;
     cout << values.diff << endl;

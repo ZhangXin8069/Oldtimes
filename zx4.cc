@@ -25,6 +25,5 @@ int main()
     cout << "Here is the vector v: " << v << endl;
     cout << "Its maximum coefficient (" << maxOfV
          << ") is at position " << i << endl;
-MatrixXf x(7,8);
 
 }

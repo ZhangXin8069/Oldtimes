@@ -1,6 +1,6 @@
 # 稳定双共轭梯度法
 import numpy as np
-n = 4
+n = 35
 converged = np.array([False])
 v = np.zeros((n, 1))
 r = np.zeros((n, 1))
