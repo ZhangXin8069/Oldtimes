@@ -1,0 +1,13 @@
+{
+    "C_Cpp.errorSquiggles": "Enabled",
+    "files.associations": {
+        "*.tcc": "cpp",
+        "algorithm": "cpp",
+        "stop_token": "cpp",
+        "nonlinearoptimization": "cpp",
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "complex": "cpp",
+        "alignedvector3": "cpp"
+    }
+}

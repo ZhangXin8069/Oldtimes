@@ -219,7 +219,7 @@ private:
 };
 int main()
 {
-    biCGstab bi(1e6, 34, 1e-5);
+    biCGstab bi(1e6, 33, 1e-5);
     bi.Run();
     biCGstab::values2out values = bi._values2out;
     cout << values.diff << endl;
