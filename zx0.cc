@@ -1,8 +1,30 @@
-#include "2D_test.h"
-#include "biCGstab.h"
-int main()
+#include "zx_h.h"
+class biCGstabX : protected biCGstab
+// Going to be Preconditioned Stable Biconjugate Gradient Method...
 {
-    // gird distance
+public:
+    using biCGstab::_values2out;
+    using biCGstab::biCGstab;
+    using biCGstab::del4values2out;
+    void del4biCGstab(biCGstabX *poit)
+    {
+        poit = NULL;
+        delete poit;
+    };
+    void Run()
+    {
+        Config();
+        while (loop + 1)
+        {
+            Calculate();
+        };
+    };
+
+private:
+    using biCGstab::Calculate;
+    using biCGstab::Compare;
+    void Config(){
+        // gird distance
     int nx = 4;
     int nt = 4;
     int ns = 2;
@@ -29,28 +51,83 @@ int main()
             src1[i] = 0;
 
     Dslash2(src, ssrc, U, mass, true);
-    CG(ssrc, dest, U, mass, 1000);
-    Dslash2(src1, ssrc, U, mass, true);
-    CG(ssrc, dest_1, U, mass, 1000);
-    // Dslash2(dest,ssrc,U,mass,false);
-    fermi_to_prop(dest, prop, 0);
-    // fermi_to_prop(dest_1,prop,1);
 
-    for (int x = 0; x < dest.lat_x; x++)
-        for (int t = 0; t < dest.lat_t; t++)
-            for (int s = 0; s < dest.lat_spin; s++)
-            {
-                //    printf("dest=%f\n",prop[(x*prop.lat_t+t)*prop.lat_spin*prop.lat_spin+(0*prop.lat_spin)+s].real());
-            }
+     loop = 0;
+        proi = 1.0;
+        alpha = 1.0;
+        wi = 1.0;
+        A = MatrixXd::Random(nu4dim, nu4dim);
+        b = VectorXd::Random(nu4dim);
+        xi = VectorXd::Random(nu4dim);
+        ri = b - A * xi;
+        pi = VectorXd::Zero(nu4dim);
+        r0 = ri;
+        vi = VectorXd::Zero(nu4dim);
+        cout << "A:" << endl
+             << A << "\n*************************************\n"
+             << "b:" << endl
+             << b
+             << "\n*************************************\n"
+            //  << "x(0):"
+            //  << endl
+            //  << xi << endl
+            //  << "\n*************************************\n"
+            //  << "r(0):"
+            //  << endl
+            //  << ri << endl
+            //  << "\n*************************************\n"
+            ;
+    };
+    void CalculateX(){
 
-    // printf("s1=%f\n",s1.real());
+    };
+    void Calculate()
+    // Refer to https://zh.m.wikipedia.org/wiki/稳定双共轭梯度法
+    {
+        loop += 1;
+        double &proI = tmp4double;
+        proI = proi;
 
-    // printf("norm_propagator0=%f\n",norm_2(dest));
-    printf("norm_propagator1=%f\n", norm_2(prop));
-    // printf("norm_src-propagator=%.10e\n",norm_2(ssrc-src));
-    // printf("dslash_1=%f\n",norm_2(ssrc));
-    // printf("dslash_2=%f\n",norm_2(dest));
-    biCGstab bi(1e5, 33, 1e-5);
+        double &proi1 = proi;
+        proi1 = r0.adjoint() * ri;
+
+        double &beta = tmp4double;
+        beta = (proi1 / proI) * (alpha / wi);
+
+        VectorXd &pi1 = pi;
+        pi1 = ri + beta * (pi - wi * vi);
+
+        VectorXd &vi1 = vi;
+        
+        vi1 = A * pi1;
+
+        alpha = proi1 / (r0.adjoint() * vi1);
+        VectorXd &s = ri;
+        s = ri - alpha * vi1;
+
+        double &wi1 = wi;
+        tmp4double = (A * s).adjoint() * s;
+        wi1 = tmp4double / ((A * s).adjoint() * (A * s));
+
+        VectorXd &xi1 = xi;
+        xi1 = xi + alpha * pi1 + wi1 * s;
+        Compare();
+        VectorXd &ri1 = ri;
+        ri1 = s - wi1 * (A * s);
+        //     cout << "w(" << loop << "):" << endl
+        //          << wi << "\n*************************************\n"
+        //          << "a(" << loop << "):" << endl
+        //          << alpha << "\n*************************************\n"
+        //          << "r(" << loop << "):" << endl
+        //          << ri << "\n*************************************\n"
+        //          << "x(" << loop << "):" << endl
+        //          << xi << "\n*************************************\n";
+        //
+    };
+};
+int main()
+{
+    biCGstabX bi(1e5, 33, 1e-5);
     bi.Run();
     biCGstab::values2out values = bi._values2out;
     cout << values.diff << endl;

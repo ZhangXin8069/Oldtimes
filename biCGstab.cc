@@ -1,7 +1,6 @@
 #include "biCGstab.h"
 #include <iostream>
 #include "Eigen/Core"
-#include "biCGstab.h"
 using namespace std;
 using namespace Eigen;
 namespace biCGstab

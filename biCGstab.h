@@ -149,71 +149,72 @@ protected:
         //      << xi << "\n*************************************\n";
     };
 };
-class biCGstabX : protected biCGstab
-// Going to be Preconditioned Stable Biconjugate Gradient Method...
-{
-public:
-    using biCGstab::_values2out;
-    using biCGstab::biCGstab;
-    using biCGstab::del4values2out;
-    void del4biCGstab(biCGstabX *poit)
-    {
-        poit = NULL;
-        delete poit;
-    };
-    void Run()
-    {
-        Config();
-        while (loop + 1)
-        {
-            Calculate();
-        };
-    };
+// class biCGstabX : protected biCGstab
+// // Going to be Preconditioned Stable Biconjugate Gradient Method...
+// {
+// public:
+//     using biCGstab::_values2out;
+//     using biCGstab::biCGstab;
+//     using biCGstab::del4values2out;
+//     void del4biCGstab(biCGstabX *poit)
+//     {
+//         poit = NULL;
+//         delete poit;
+//     };
+//     void Run()
+//     {
+//         Config();
+//         while (loop + 1)
+//         {
+//             Calculate();
+//         };
+//     };
 
-private:
-    using biCGstab::Calculate;
-    using biCGstab::Compare;
-    using biCGstab::Config;
-    void Calculate()
-    // Refer to https://zh.m.wikipedia.org/wiki/稳定双共轭梯度法
-    {
-        loop += 1;
-        double &proI = tmp4double;
-        proI = proi;
+// private:
+//     using biCGstab::Calculate;
+//     using biCGstab::Compare;
+//     using biCGstab::Config;
+//     void Calculate()
+//     // Refer to https://zh.m.wikipedia.org/wiki/稳定双共轭梯度法
+//     {
+//         loop += 1;
+//         double &proI = tmp4double;
+//         proI = proi;
 
-        double &proi1 = proi;
-        proi1 = r0.adjoint() * ri;
+//         double &proi1 = proi;
+//         proi1 = r0.adjoint() * ri;
 
-        double &beta = tmp4double;
-        beta = (proi1 / proI) * (alpha / wi);
+//         double &beta = tmp4double;
+//         beta = (proi1 / proI) * (alpha / wi);
 
-        VectorXd &pi1 = pi;
-        pi1 = ri + beta * (pi - wi * vi);
+//         VectorXd &pi1 = pi;
+//         pi1 = ri + beta * (pi - wi * vi);
 
-        VectorXd &vi1 = vi;
-        vi1 = A * pi1;
+//         VectorXd &vi1 = vi;
+        
+//         vi1 = A * pi1;
 
-        alpha = proi1 / (r0.adjoint() * vi1);
-        VectorXd &s = ri;
-        s = ri - alpha * vi1;
+//         alpha = proi1 / (r0.adjoint() * vi1);
+//         VectorXd &s = ri;
+//         s = ri - alpha * vi1;
 
-        double &wi1 = wi;
-        tmp4double = (A * s).adjoint() * s;
-        wi1 = tmp4double / ((A * s).adjoint() * (A * s));
+//         double &wi1 = wi;
+//         tmp4double = (A * s).adjoint() * s;
+//         wi1 = tmp4double / ((A * s).adjoint() * (A * s));
 
-        VectorXd &xi1 = xi;
-        xi1 = xi + alpha * pi1 + wi1 * s;
-        Compare();
-        VectorXd &ri1 = ri;
-        ri1 = s - wi1 * (A * s);
-        //     cout << "w(" << loop << "):" << endl
-        //          << wi << "\n*************************************\n"
-        //          << "a(" << loop << "):" << endl
-        //          << alpha << "\n*************************************\n"
-        //          << "r(" << loop << "):" << endl
-        //          << ri << "\n*************************************\n"
-        //          << "x(" << loop << "):" << endl
-        //          << xi << "\n*************************************\n";
-        //
-    };
-};
+//         VectorXd &xi1 = xi;
+//         xi1 = xi + alpha * pi1 + wi1 * s;
+//         Compare();
+//         VectorXd &ri1 = ri;
+//         ri1 = s - wi1 * (A * s);
+//         //     cout << "w(" << loop << "):" << endl
+//         //          << wi << "\n*************************************\n"
+//         //          << "a(" << loop << "):" << endl
+//         //          << alpha << "\n*************************************\n"
+//         //          << "r(" << loop << "):" << endl
+//         //          << ri << "\n*************************************\n"
+//         //          << "x(" << loop << "):" << endl
+//         //          << xi << "\n*************************************\n";
+//         //
+//     };
+// };
