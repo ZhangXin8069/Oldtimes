@@ -3,14 +3,28 @@ class biCGstabX : protected biCGstab
 // Going to be Preconditioned Stable Biconjugate Gradient Method...
 {
 public:
-    using biCGstab::_values2out;
-    using biCGstab::biCGstab;
-    using biCGstab::del4values2out;
-    void del4biCGstab(biCGstabX *poit)
+    biCGstabX(int max4loop = 1e5,
+              float min4diff = 1e-5,
+              int nx = 3,
+              int nt = 3,
+              int ns = 2,
+              int nd = 2,
+              double mass = 1,
+              MatrixXd *poit4A = NULL,
+              VectorXd *poit4b = NULL)
     {
-        poit = NULL;
-        delete poit;
+        this->max4loop = max4loop;
+        this->nu4dim = nx * nt * ns;
+        this->nx = nx;
+        this->nt = nt;
+        this->ns = ns;
+        this->nd = nd;
+        this->min4diff = min4diff;
+        this->poit4A = poit4A;
+        this->poit4b = poit4b;
     };
+    using biCGstab::_values2out;
+    using biCGstab::del4values2out;
     void Run()
     {
         Config();
@@ -19,67 +33,39 @@ public:
             Calculate();
         };
     };
+    void del4biCGstab(biCGstabX *poit)
+    {
+        poit = NULL;
+        delete poit;
+    };
 
 private:
+    int nx;
+    int nt;
+    int ns;
+    int nd;
+    double mass;
     using biCGstab::Calculate;
     using biCGstab::Compare;
-    void Config(){
-        // gird distance
-    int nx = 4;
-    int nt = 4;
-    int ns = 2;
-    int nd = 2;
-    double mass = 1;
-    lattice_fermi src(nx, nt, ns);
-    lattice_fermi ssrc(nx, nt, ns);
-    lattice_fermi dest(nx, nt, ns);
-    lattice_fermi dest_1(nx, nt, ns);
-    lattice_fermi src1(nx, nt, ns);
-    lattice_gauge U(nx, nt, ns);
-    lattice_propagator prop(nx, nt, ns);
-    for (int i = 0; i < U.size; i++)
-        U[i] = 1.0;
-    for (int i = 0; i < src.size; i++)
-        if (i == 0)
-            src[i] = 1;
-        else
-            src[i] = 0;
-    for (int i = 0; i < src1.size; i++)
-        if (i == 1)
-            src1[i] = 1;
-        else
-            src1[i] = 0;
-
-    Dslash2(src, ssrc, U, mass, true);
-
-     loop = 0;
-        proi = 1.0;
-        alpha = 1.0;
-        wi = 1.0;
-        A = MatrixXd::Random(nu4dim, nu4dim);
-        b = VectorXd::Random(nu4dim);
-        xi = VectorXd::Random(nu4dim);
-        ri = b - A * xi;
-        pi = VectorXd::Zero(nu4dim);
-        r0 = ri;
-        vi = VectorXd::Zero(nu4dim);
-        cout << "A:" << endl
-             << A << "\n*************************************\n"
-             << "b:" << endl
-             << b
-             << "\n*************************************\n"
-            //  << "x(0):"
-            //  << endl
-            //  << xi << endl
-            //  << "\n*************************************\n"
-            //  << "r(0):"
-            //  << endl
-            //  << ri << endl
-            //  << "\n*************************************\n"
-            ;
-    };
-    void CalculateX(){
-
+    using biCGstab::Config;
+    void CalculateX()
+    {
+        lattice_fermi src(nx, nt, ns);
+        lattice_fermi dest(nx, nt, ns);
+        lattice_gauge U(nx, nt, ns);
+        for (int i = 0; i < U.size; i++)
+        {
+            U[i] = 1.0;
+        };
+        for (int i = 0; i < src.size; i++)
+        {
+            src[i] = pi(i);
+        };
+        Dslash2(src, dest, U, mass, true);
+        for (int i = 0; i < dest.size; i++)
+        {
+            vi.real()(i) = dest[i].real();
+        };
     };
     void Calculate()
     // Refer to https://zh.m.wikipedia.org/wiki/稳定双共轭梯度法
@@ -98,8 +84,10 @@ private:
         pi1 = ri + beta * (pi - wi * vi);
 
         VectorXd &vi1 = vi;
-        
-        vi1 = A * pi1;
+        CalculateX();
+        // Can't get the value of the A matrix.
+        // Still don't use plurals,but chang it later.
+        //  vi1 = A * pi1;
 
         alpha = proi1 / (r0.adjoint() * vi1);
         VectorXd &s = ri;
@@ -127,7 +115,7 @@ private:
 };
 int main()
 {
-    biCGstabX bi(1e5, 33, 1e-5);
+    biCGstabX bi;
     bi.Run();
     biCGstab::values2out values = bi._values2out;
     cout << values.diff << endl;
