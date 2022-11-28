@@ -1,4 +1,5 @@
 #include "zx_h.h"
+#include <vector>
 class biCGstabX : protected biCGstab
 // Going to be Preconditioned Stable Biconjugate Gradient Method...
 {
@@ -56,6 +57,7 @@ private:
         for (int i = 0; i < U.size; i++)
         {
             U[i] = 1.0;
+            // U[i] = 1.0;
         };
         for (int i = 0; i < src.size; i++)
         {
@@ -102,6 +104,8 @@ private:
         Compare();
         VectorXd &ri1 = ri;
         ri1 = s - wi1 * (A * s);
+
+
         //     cout << "w(" << loop << "):" << endl
         //          << wi << "\n*************************************\n"
         //          << "a(" << loop << "):" << endl

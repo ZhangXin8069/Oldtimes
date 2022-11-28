@@ -246,34 +246,6 @@ def isprime(n=100):
     # return f
 
 
-def hehe(a=[0.9460666, 0.11884469, -0.48295271, -0.93720798, -1.19210023],
-         b=[-0.87466906, -1.28013417, -1.56781624, -1.79095979, -1.97328135], n=2):
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    from numpy import array, polyfit
-    from sympy import lambdify, ln, symbols
-    sns.set()
-    x = symbols('x')
-    f = symbols('f', functions=True)
-    f = lambdify(x, ln(x))
-    # a = [0.2, 0.092, 0.051, 0.032, 0.022, 0.016]
-    # b = linspace(76.6/2, 76.6/7, 6, endpoint=True)/100
-
-    # print(a, b)
-    # a, b = f(array(a)*10), f(array(b))
-    a, b = array(a), array(b)
-    ni = polyfit(a, b, n)
-    # print(a, b, ni)
-    f = 0
-    for i in range(len(ni)):
-        f += ni[-(i + 1)] * x ** (i)
-    F = lambdify(x, f)
-    plt.plot(a, b, 'b-o', a, F(a), 'r:d')
-    plt.title('f={}'.format(f))
-    plt.show()
-    return F
-
-
 def lineStas(x, y):
     import matplotlib.pyplot as plt
     from scipy import stats
@@ -285,20 +257,23 @@ def lineStas(x, y):
     plt.plot(x, getmodel)
 
 
-def Polyfit(x, y, deg):
+def polyFit(x=[], y=[], deg=1, text='', xlabel='', ylabel=''):
     import matplotlib.pyplot as plt
     import pandas as pd
     from numpy import corrcoef, poly1d, polyfit
     from seaborn import set
     set()
-    # 以上为预设，非必要
     plt.scatter(x, y)
     model = poly1d(polyfit(x, y, deg))
     r = pd.DataFrame(corrcoef(x, y))
     plt.plot(x, model(x))
-    plt.title(str(model) +
-              '\nCorrelation coefficient \n(take rows in order as new rows, first-order correlation, multi-order ignore)\n' + str(
-        r))
+    plt.xlabel(xlabel=xlabel)
+    plt.ylabel(ylabel=ylabel)
+    plt.title(str(model)+"\n{}\n".format(text))
+    # plt.title(str(model) +
+    #           '\nCorrelation coefficient \n(take rows in order as new rows, first-order correlation, multi-order ignore)\n' + str(
+    #     r))
+    plt.show()
     return model, r
 
 
@@ -310,50 +285,53 @@ def Polyfit(x, y, deg):
 #     if inspect.isfunction(obj):
 # print(name, str(obj))
 if __name__ == '__main__':
-    staff(wo='原神草神')
-    # import numpy as np
-    # news()
-    # news()
-    # panch()
-    # import matplotlib.pyplot as plt
-    # plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
-    # plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+    a = [40, 45, 50, 55, 60]
+    b = [0.39, 0.44, 0.49, 0.54, 0.58]
+    polyFit(a, b, 1)
+# staff(wo='原神草神')
+# import numpy as np
+# news()
+# news()
+# panch()
+# import matplotlib.pyplot as plt
+# plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+# plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
 
-    # # 支持中文
-    # plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
-    # plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
-    # from matplotlib import rc
-    # font = {'family': 'SimHei', "size": 24}
-    # rc('font', **font)  # 一次定义终身使用
-    # from gethtml.gethtmlbypyppeteer import gethtmlbypyppteer
-    # f = hehe(n=1)
-    # x = np.linspace(0.5, 3.5, 7, endpoint=True)*1e-3*9.793
-    # y = np.array([12.5, 25.1, 38.4, 51.5, 66.6, 79.5, 91.5])
-    # deg = 1
-    # print(x, y)
-    # Polyfit(x, y, deg)
-    # staff(wo='利兹与青鸟', nu=30, url='https://yandex.com/images/search?family=yes&rpt=imageview&cbir_page=similar&url=https%3A%2F%2Fyandex-images.clstorage.net%2FU5l21Ro55%2F5e2d48nVvkh%2Ftv4qHX8gnMkCD0xATFyjmg29CMMkKQSyaWePtHYmuaXOl-F7d5rZoEm4y4V-BD3tLx4KY6AUcIJLytsJKJA5rrinbY21b9FAVh2dR1zeY8vKMoSKbSeY-iSo1b_85eqkDNbmqbOKWi8ELFucKNygOLYAi6wrjj8JWwLayGER8S94rjNK_GiagkBJCxkCXObETvbABi3q1nzib1ywfSUh7QiXLDp6iNsjB3LVnKtd6zczhQQlrYT5wN0BG80l0XCn9-H6RXFuEQUBiQqbBBRjxYq1y8ZuZBF7pCDZsL_p62pMW-SxsklYLQ890thlUq7_soyEJenEconSyBWCqZd9ZDdh-sc-4NlIBgqD0sbbLcEHcE_C62Rc-Opq0fOxYmjrQ5mr8_BEGihNfR3UpZ3leL5AiyzlCbWD0AWUQmfX_ig6Y_2Cs-WRAUCBgR-JUOWHA7TIgCyinfVkYxfzMqhv40HfLLY1RRBpjXUUGqXRIz3xBU2tLQR_iFnFlMVsmvpuMq0wgz6p0ARPgspaTN7uyQ_3A4Sg4l18qurYcHWjLmxBnCBzv4uY7oA02JogV24_Mo5NI6CLuIqZwNwK41L8ZHLqdM37oJWBB8qGlkZY40OJMUZHLqSdOqXmH3b6oi-izN2iP7KBWKgLMNzQZ9PqObFJROJhTbMLGQ8ciGGY-ez7bHTCdSFdRkwKANZKmK5JSjTJQqvqlfzsr5h2sS_h5kDepjmyylUmz7-dkCHa5PW9D8ptK8S_yBlPX4CkmP0mN6D3xfKvUY2ODwoeQtityEV5RwBvpp3yLKYXPfWh5ysHHiE3sk1fLc73EJBhWWN9947PKuFL-oKUzVACIVq4oXkiMgA66FQMSs3L0sTYJoxJ_A5GZC6SdCFu1nj6K26uSVUm-zrFFCoCeJJVplig_3BHyCqiTXCKmcGcCqRbvmG_7bNF_eccRgjFhNuBl2lAQH2Pwuvlmzqop1c5dc&cbir_id=1495804%2FgbGpJxKlDatVo2JaWcaXdg1998&crop=0.15%3B0.15%3B0.85%3B0.85')
-    # news()
-    # n=1000000
-    # print(isprime(1000))
-    # li=isprime(n)
-    # for i in range(n):
-    #     if li[i] :
-    #         print(i)
-    # print(gethtmlbypyppteer())
-    # news()
-    # mazemain(n=80, m=80
-    # news()
-    # from matplotlib import pyplot as plt
-    # import numpy as np
+# # 支持中文
+# plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+# plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+# from matplotlib import rc
+# font = {'family': 'SimHei', "size": 24}
+# rc('font', **font)  # 一次定义终身使用
+# from gethtml.gethtmlbypyppeteer import gethtmlbypyppteer
+# f = hehe(n=1)
+# x = np.linspace(0.5, 3.5, 7, endpoint=True)*1e-3*9.793
+# y = np.array([12.5, 25.1, 38.4, 51.5, 66.6, 79.5, 91.5])
+# deg = 1
+# print(x, y)
+# Polyfit(x, y, deg)
+# staff(wo='利兹与青鸟', nu=30, url='https://yandex.com/images/search?family=yes&rpt=imageview&cbir_page=similar&url=https%3A%2F%2Fyandex-images.clstorage.net%2FU5l21Ro55%2F5e2d48nVvkh%2Ftv4qHX8gnMkCD0xATFyjmg29CMMkKQSyaWePtHYmuaXOl-F7d5rZoEm4y4V-BD3tLx4KY6AUcIJLytsJKJA5rrinbY21b9FAVh2dR1zeY8vKMoSKbSeY-iSo1b_85eqkDNbmqbOKWi8ELFucKNygOLYAi6wrjj8JWwLayGER8S94rjNK_GiagkBJCxkCXObETvbABi3q1nzib1ywfSUh7QiXLDp6iNsjB3LVnKtd6zczhQQlrYT5wN0BG80l0XCn9-H6RXFuEQUBiQqbBBRjxYq1y8ZuZBF7pCDZsL_p62pMW-SxsklYLQ890thlUq7_soyEJenEconSyBWCqZd9ZDdh-sc-4NlIBgqD0sbbLcEHcE_C62Rc-Opq0fOxYmjrQ5mr8_BEGihNfR3UpZ3leL5AiyzlCbWD0AWUQmfX_ig6Y_2Cs-WRAUCBgR-JUOWHA7TIgCyinfVkYxfzMqhv40HfLLY1RRBpjXUUGqXRIz3xBU2tLQR_iFnFlMVsmvpuMq0wgz6p0ARPgspaTN7uyQ_3A4Sg4l18qurYcHWjLmxBnCBzv4uY7oA02JogV24_Mo5NI6CLuIqZwNwK41L8ZHLqdM37oJWBB8qGlkZY40OJMUZHLqSdOqXmH3b6oi-izN2iP7KBWKgLMNzQZ9PqObFJROJhTbMLGQ8ciGGY-ez7bHTCdSFdRkwKANZKmK5JSjTJQqvqlfzsr5h2sS_h5kDepjmyylUmz7-dkCHa5PW9D8ptK8S_yBlPX4CkmP0mN6D3xfKvUY2ODwoeQtityEV5RwBvpp3yLKYXPfWh5ysHHiE3sk1fLc73EJBhWWN9947PKuFL-oKUzVACIVq4oXkiMgA66FQMSs3L0sTYJoxJ_A5GZC6SdCFu1nj6K26uSVUm-zrFFCoCeJJVplig_3BHyCqiTXCKmcGcCqRbvmG_7bNF_eccRgjFhNuBl2lAQH2Pwuvlmzqop1c5dc&cbir_id=1495804%2FgbGpJxKlDatVo2JaWcaXdg1998&crop=0.15%3B0.15%3B0.85%3B0.85')
+# news()
+# n=1000000
+# print(isprime(1000))
+# li=isprime(n)
+# for i in range(n):
+#     if li[i] :
+#         print(i)
+# print(gethtmlbypyppteer())
+# news()
+# mazemain(n=80, m=80
+# news()
+# from matplotlib import pyplot as plt
+# import numpy as np
 
-    # x1 = np.linspace(1, 10, 20)
-    # print(x1)
-    # y1 = x1 * x1 + 2
-    # fig = plt.figure()
-    # axes = fig.add_axes([0.1, 0.1, 0.9, 0.9])
-    # axes.plot(x1, y1, 'r')
-    # plt.show()
+# x1 = np.linspace(1, 10, 20)
+# print(x1)
+# y1 = x1 * x1 + 2
+# fig = plt.figure()
+# axes = fig.add_axes([0.1, 0.1, 0.9, 0.9])
+# axes.plot(x1, y1, 'r')
+# plt.show()
 
 
 # def fileStatisticsbyPython_zx(pah='./'):
