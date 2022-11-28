@@ -8,9 +8,9 @@ class biCGstab
 // Stable Biconjugate Gradient Method
 {
 public:
-    biCGstab(int max4loop = 10,
-             int nu4dim = 2,
-             float min4diff = 1e-4,
+    biCGstab(int max4loop = 1e5,
+             int nu4dim = 32,
+             float min4diff = 1e-5,
              MatrixXcd *poit4A = NULL,
              VectorXcd *poit4b = NULL)
     {
@@ -114,21 +114,20 @@ protected:
     };
     void Compare()
     {
-        _values2out.diff = (A * xi - b).norm();
-        cout
-            << "diff(" << loop << "):" << endl
-            << _values2out.diff << "\n*************************************\n";
+        _values2out.diff = (A * xi - b).norm() / b.norm();
         if (loop == max4loop || _values2out.diff < min4diff)
         {
             _values2out.loop = loop;
             _values2out.xi = xi;
             cout
-                << "R(" << loop << "):" << endl
+                << "r(" << loop << "):" << endl
                 << ri << "\n*************************************\n"
-                << "X(" << loop << "):" << endl
-                << xi << "\n*************************************\n";
+                << "x(" << loop << "):" << endl
+                << xi << "\n*************************************\n"
+                << "diff(" << loop << "):" << endl
+                << _values2out.diff << "\n*************************************\n";
             loop = -2;
-        }
+        };
     };
     void Calculate()
     // Refer to https://zh.m.wikipedia.org/wiki/稳定双共轭梯度法.
@@ -163,7 +162,6 @@ protected:
         ri1 = s - wi1 * t;
     };
 };
-
 
 // #include <iostream>
 // #include "Eigen/Core"
@@ -358,7 +356,7 @@ protected:
 // //         pi1 = ri + beta * (pi - wi * vi);
 
 // //         VectorXd &vi1 = vi;
-        
+
 // //         vi1 = A * pi1;
 
 // //         alpha = proi1 / (r0.adjoint() * vi1);

@@ -1,7 +1,7 @@
 #include "zx_h.h"
 #include <vector>
 
-class biCGstabX : protected biCGstab
+class biCGstabX 
 // Stable Biconjugate Gradient Method
 {
 public:
@@ -114,21 +114,20 @@ protected:
     void Compare()
     {
         Dslash(xi, tmp4Vector);
-        _values2out.diff = (tmp4Vector - b).norm()/b.norm();
-        cout
-            << "diff(" << loop << "):" << endl
-            << _values2out.diff << "\n*************************************\n";
+        _values2out.diff = (tmp4Vector - b).norm() / b.norm();
         if (loop == max4loop || _values2out.diff < min4diff)
         {
             _values2out.loop = loop;
             _values2out.xi = xi;
             cout
-                << "R(" << loop << "):" << endl
+                << "r(" << loop << "):" << endl
                 << ri << "\n*************************************\n"
-                << "X(" << loop << "):" << endl
-                << xi << "\n*************************************\n";
+                << "x(" << loop << "):" << endl
+                << xi << "\n*************************************\n"
+                << "diff(" << loop << "):" << endl
+                << _values2out.diff << "\n*************************************\n";
             loop = -2;
-        }
+        };
     };
     void Calculate()
     // Refer to https://zh.m.wikipedia.org/wiki/稳定双共轭梯度法.
@@ -186,11 +185,11 @@ protected:
 };
 int main()
 {
+//     biCGstab bi;
+//     bi.Run();
+//     bi.del4biCGstab(&bi);
     biCGstabX bi;
     bi.Run();
-    biCGstabX::values2out values = bi._values2out;
-    cout << values.diff << endl;
-    bi.del4values2out(&values);
     bi.del4biCGstabX(&bi);
     return 0;
 };

@@ -1,5 +1,5 @@
 #include "zx_h.h"
-void Dslash(VectorXcd &value4src, VectorXcd &value4dest, int nx = 3, int nt = 3, int ns = 2, float mass = 1.0)
+void Dslash(VectorXcd &value4src, VectorXcd &value4dest, int nx = 4, int nt = 4, int ns = 2, float mass = 1.0)
 {
      cout
          << "value4src:" << endl
