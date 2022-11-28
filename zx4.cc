@@ -1,29 +1,56 @@
-#include <iostream>
-#include <Eigen/Dense>
-using namespace std;
-using namespace Eigen;
+#include "zx_h.h"
+void Dslash(VectorXcd &value4src, VectorXcd &value4dest, int nx = 3, int nt = 3, int ns = 2, float mass = 1.0)
+{
+     cout
+         << "value4src:" << endl
+         << value4src
+         << "\n*************************************\n"
+         << "value4dest:"
+         << endl
+         << value4dest << endl
+         << "\n#############################\n";
+     lattice_fermi src(nx, nt, ns);
+     lattice_fermi dest(nx, nt, ns);
+     lattice_gauge U(nx, nt, ns);
+     for (int i = 0; i < U.size; i++)
+     {
+          cout << U.size;
+          U[i] = 1.0;
+     };
+     for (int i = 0; i < src.size; i++)
+     {
+          cout << src.size;
+          src[i] = value4src(i);
+     };
+     Dslash2(src, dest, U, mass, true);
+      value4src=value4dest;
+     for (int i = 0; i < dest.size; i++)
+     {
+          cout << dest.size;
+          value4dest(i) = dest[i];
+     }
+     cout
+         << "value4src:" << endl
+         << value4src
+         << "\n*************************************\n"
+         << "value4dest:"
+         << endl
+         << value4dest << endl
+         << "\n*************************************\n";
+};
 int main()
 {
-    Eigen::Matrix2d mat;
-    mat << 1, 2,
-        3, 4;
-    cout << "Here is mat.sum():       " << mat.sum() << endl;
-    cout << "Here is mat.prod():      " << mat.prod() << endl;
-    cout << "Here is mat.mean():      " << mat.mean() << endl;
-    cout << "Here is mat.minCoeff():  " << mat.minCoeff() << endl;
-    cout << "Here is mat.maxCoeff():  " << mat.maxCoeff() << endl;
-    cout << "Here is mat.trace():     " << mat.trace() << endl;
-    Matrix3f m = Matrix3f::Random();
-    std::ptrdiff_t i, j;
-    float minOfM = m.minCoeff(&i, &j);
-    cout << "Here is the matrix m:\n"
-         << m << endl;
-    cout << "Its minimum coefficient (" << minOfM
-         << ") is at position (" << i << "," << j << ")\n\n";
-    RowVector4i v = RowVector4i::Random();
-    int maxOfV = v.maxCoeff(&i);
-    cout << "Here is the vector v: " << v << endl;
-    cout << "Its maximum coefficient (" << maxOfV
-         << ") is at position " << i << endl;
+     int nu4dim;
+     int nx = 4;
+     int nt = 4;
+     int ns = 2;
+     int nd = 2;
+     double mass = 1;
+     nu4dim = nx * nt * ns;
+     VectorXcd bi;
+     VectorXcd xi;
+     bi = VectorXcd::Random(nu4dim);
+     xi = VectorXcd::Random(nu4dim);
 
-}
+     Dslash(bi, xi);
+};

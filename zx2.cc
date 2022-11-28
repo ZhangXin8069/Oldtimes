@@ -8,8 +8,8 @@ class biCGstab
 // Stable Biconjugate Gradient Method
 {
 public:
-    biCGstab(int max4loop = 1e2,
-             int nu4dim = 44,
+    biCGstab(int max4loop = 10,
+             int nu4dim = 2,
              float min4diff = 1e-4,
              MatrixXcd *poit4A = NULL,
              VectorXcd *poit4b = NULL)
@@ -33,6 +33,13 @@ public:
         while (loop + 1)
         {
             Calculate();
+            loop += 1;
+            pi = pi1;
+            xi = xi1;
+            ri = ri1;
+            proi = proi1;
+            vi = vi1;
+            wi = wi1;
         };
     };
     void del4biCGstab(biCGstab *poit)
@@ -56,16 +63,27 @@ protected:
     VectorXcd b;
     VectorXcd r0;
     VectorXcd pi;
+    VectorXcd pi1;
     VectorXcd xi;
+    VectorXcd xi1;
     VectorXcd ri;
+    VectorXcd ri1;
     VectorXcd vi;
-    double alpha;
-    double proi;
-    double wi;
-    double tmp4double;
+    VectorXcd vi1;
+    VectorXcd t;
+    VectorXcd s;
+    VectorXcd tmp4Vector;
+    VectorXcd tmp4VectorX;
+    complex<double> alpha;
+    complex<double> beta;
+    complex<double> proi;
+    complex<double> proi1;
+    complex<double> wi;
+    complex<double> wi1;
+    complex<double> tmp4Complex;
+    complex<double> tmp4ComplexX;
     float diff;
     int loop;
-    complex<double> tmp4complex;
     void Config()
     {
         loop = 0;
@@ -80,82 +98,74 @@ protected:
         r0 = ri;
         vi = VectorXcd::Zero(nu4dim);
         cout << "A:" << endl
-             << A << "\n*************************************\n"
+             << A
+             << "\n*************************************\n"
              << "b:" << endl
              << b
              << "\n*************************************\n"
-            //  << "x(0):"
-            //  << endl
-            //  << xi << endl
-            //  << "\n*************************************\n"
-            //  << "r(0):"
-            //  << endl
-            //  << ri << endl
-            //  << "\n*************************************\n"
-            ;
+             << "x(0):"
+             << endl
+             << xi << endl
+             << "\n*************************************\n"
+             << "r(0):"
+             << endl
+             << ri << endl
+             << "\n*************************************\n";
     };
     void Compare()
     {
-        if (loop == max4loop || (A * xi - b).norm() < min4diff)
+        _values2out.diff = (A * xi - b).norm();
+        cout
+            << "diff(" << loop << "):" << endl
+            << _values2out.diff << "\n*************************************\n";
+        if (loop == max4loop || _values2out.diff < min4diff)
         {
+            _values2out.loop = loop;
+            _values2out.xi = xi;
             cout
                 << "R(" << loop << "):" << endl
                 << ri << "\n*************************************\n"
                 << "X(" << loop << "):" << endl
                 << xi << "\n*************************************\n";
-            _values2out.loop = loop;
-            _values2out.xi = xi;
-            _values2out.diff = (A * xi - b).norm();
-            loop = -1;
+            loop = -2;
         }
     };
     void Calculate()
     // Refer to https://zh.m.wikipedia.org/wiki/稳定双共轭梯度法.
     {
-        loop += 1;
-        double &proI = tmp4double;
-        proI = proi;
-
-        double &proi1 = proi;
-        tmp4complex= r0.transpose() * ri;
-        cout <<tmp4complex;
-        exit(0);
-        // double &beta = tmp4double;
-        // beta = (proi1 / proI) * (alpha / wi);
-
-        // VectorXcd &pi1 = pi;
-        // pi1 = ri + beta * (pi - wi * vi);
-
-        // VectorXcd &vi1 = vi;
-        // vi1 = A * pi1; // dslash,A is special.
-
-        // alpha = proi1 / (r0.adjoint() * vi1);
-        // VectorXcd &s = ri;
-        // s = ri - alpha * vi1;
-
-        // double &wi1 = wi;
-        // tmp4double = (A * s).adjoint() * s;
-        // wi1 = tmp4double / ((A * s).adjoint() * (A * s));
-
-        // VectorXcd &xi1 = xi;
-        // xi1 = xi + alpha * pi1 + wi1 * s;
-        // Compare();
-        // VectorXcd &ri1 = ri;
-        // ri1 = s - wi1 * (A * s);
-
-        // cout << "w(" << loop << "):" << endl
-        //      << wi << "\n*************************************\n"
-        //      << "a(" << loop << "):" << endl
-        //      << alpha << "\n*************************************\n"
-        //      << "r(" << loop << "):" << endl
-        //      << ri << "\n*************************************\n"
-        //      << "x(" << loop << "):" << endl
-        //      << xi << "\n*************************************\n";
+        cout << "proi(" << loop << "):" << endl
+             << proi << "\n*************************************\n"
+             << "a(" << loop << "):" << endl
+             << alpha << "\n*************************************\n"
+             << "w(" << loop << "):" << endl
+             << wi << "\n*************************************\n"
+             << "vi(" << loop << "):" << endl
+             << vi << "\n*************************************\n"
+             << "pi(" << loop << "):" << endl
+             << pi << "\n*************************************\n"
+             << "r(" << loop << "):" << endl
+             << ri << "\n*************************************\n"
+             << "x(" << loop << "):" << endl
+             << xi << "\n*************************************\n";
+        proi1 = r0.transpose() * ri;
+        beta = (proi1 / proi) * (alpha / wi);
+        pi1 = ri + beta * (pi - wi * vi);
+        vi1 = A * pi1;
+        tmp4Complex = r0.transpose() * vi1;
+        alpha = proi1 / tmp4Complex;
+        s = ri - alpha * vi1;
+        t = A * s;
+        tmp4Complex = t.transpose() * s;
+        tmp4ComplexX = t.transpose() * t;
+        wi1 = tmp4Complex / tmp4ComplexX;
+        xi1 = xi + alpha * pi1 + wi1 * s;
+        Compare();
+        ri1 = s - wi1 * t;
     };
 };
 int main()
 {
-    biCGstab bi;
+    biCGstab bi(1e5, 34, 1e-5);
     bi.Run();
     biCGstab::values2out values = bi._values2out;
     cout << values.diff << endl;

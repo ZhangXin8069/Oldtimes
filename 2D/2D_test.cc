@@ -1,4 +1,5 @@
 #include <complex>
+#include <iostream>
 #include <vector>
 #include <math.h>
 #include <stdio.h>
@@ -384,4 +385,6 @@ int main()
     // printf("norm_src-propagator=%.10e\n",norm_2(ssrc-src));
     // printf("dslash_1=%f\n",norm_2(ssrc));
     // printf("dslash_2=%f\n",norm_2(dest));
+    std::cout << U.size;
+    cout << dest.size;
 }
