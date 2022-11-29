@@ -9,7 +9,6 @@
 
 #include <stdio.h>
 #include "/home/zhangxin/anaconda3/include/mpi.h"
-
 int main(int argc, char* argv[])
 {
     int rank, size, len;
