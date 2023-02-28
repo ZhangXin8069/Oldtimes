@@ -133,11 +133,52 @@ unset __conda_setup
 
 
 # >>> clash initialize >>>
-export https_proxy=http://127.0.0.1:7890 
-export http_proxy=http://127.0.0.1:7890
-export all_proxy=socks5://127.0.0.1:7890
+#export https_proxy=http://127.0.0.1:7890 
+#export http_proxy=http://127.0.0.1:7890
+#export all_proxy=socks5://127.0.0.1:7890
 # git config --global http.proxy 'http://127.0.0.1:7890'
 # git config --global https.proxy 'https://127.0.0.1:7890'
 # <<< clash initialize <<<
 
+# >>> zhangxin alias >>>
 alias zx0='bash ~/content/zx0.sh'
+alias zx1='bash ~/content/zx1.sh'
+alias zx2='bash ~/content/zx2.sh'
+alias zx3='bash ~/content/zx3.sh'
+alias zx4='bash ~/content/zx4.sh'
+alias zx5='bash ~/content/zx5.sh'
+alias zx6='bash ~/content/zx6.sh'
+alias zx7='bash ~/content/zx7.sh'
+alias zx8='bash ~/content/zx8.sh'
+alias zx9='bash ~/content/zx9.sh'
+alias zx0X='bash ~/content/zx0.sh'
+alias zx1X='bash ~/content/zx1.sh'
+alias zx2X='bash ~/content/zx2.sh'
+alias zx3X='bash ~/content/zx3.sh'
+alias zx4X='bash ~/content/zx4.sh'
+alias zx5X='bash ~/content/zx5.sh'
+alias zx6X='bash ~/content/zx6.sh'
+alias zx7X='bash ~/content/zx7.sh'
+alias zx8X='bash ~/content/zx8.sh'
+alias zx9X='bash ~/content/zx9.sh'
+
+alias run='sbatch < ~/run.sh'
+alias stop='bash ~/stop.sh'
+
+alias zxw1='mpic++ ~/content/my_work.cc -o zxw1 && mpirun -np 1 ~/zxw1'
+alias zxw2='mpic++ ~/content/my_work.cc -o zxw2 && mpirun -np 2 ~/zxw2'
+alias zxw3='mpic++ ~/content/my_work.cc -o zxw3 && mpirun -np 3 ~/zxw3'
+alias zxw4='mpic++ ~/content/my_work.cc -o zxw4 && mpirun -np 4 ~/zxw4'
+alias zxw5='mpic++ ~/content/my_work.cc -o zxw5 && mpirun -np 5 ~/zxw5'
+alias zxw6='mpic++ ~/content/my_work.cc -o zxw6 && mpirun -np 6 ~/zxw6'
+alias zxw7='mpic++ ~/content/my_work.cc -o zxw7 && mpirun -np 7 ~/zxw7'
+alias zxw8='mpic++ ~/content/my_work.cc -o zxw8 && mpirun -np 8 ~/zxw8'
+alias zxe1='mpic++ ~/content/my_example.cc -o zxe1 && mpirun -np 1 ~/zxe1'
+alias zxe2='mpic++ ~/content/my_example.cc -o zxe2 && mpirun -np 2 ~/zxe2'
+alias zxe3='mpic++ ~/content/my_example.cc -o zxe3 && mpirun -np 3 ~/zxe3'
+alias zxe4='mpic++ ~/content/my_example.cc -o zxe4 && mpirun -np 4 ~/zxe4'
+alias zxe5='mpic++ ~/content/my_example.cc -o zxe5 && mpirun -np 5 ~/zxe5'
+alias zxe6='mpic++ ~/content/my_example.cc -o zxe6 && mpirun -np 6 ~/zxe6'
+alias zxe7='mpic++ ~/content/my_example.cc -o zxe7 && mpirun -np 7 ~/zxe7'
+alias zxe8='mpic++ ~/content/my_example.cc -o zxe8 && mpirun -np 8 ~/zxe8'
+# <<< zhangxin alias <<<
