@@ -2,7 +2,8 @@
 #include <vector>
 #include <math.h>
 #include <stdio.h>
-
+#include <ctime>
+#include <iostream>
 using namespace std;
 
 class lattice_fermi
@@ -183,7 +184,6 @@ double norm_2(lattice_propagator f)
     for (int i = 0; i < f.size; i++)
     {
         f1 += f[i] * conj(f[i]);
-        printf("s=%f\n", f[i].real());
     }
     return f1.real();
 };
@@ -250,8 +250,8 @@ void fermi_to_prop(lattice_fermi dest, lattice_propagator &prop, int i)
             for (int s = 0; s < dest.lat_spin; s++)
             {
                 prop[(x * prop.lat_t + t) * prop.lat_spin * prop.lat_spin + (i * prop.lat_spin) + s] = dest[(x * prop.lat_t + t) * prop.lat_spin + s];
-                //    printf("dest=%f\n",dest[(x*prop.lat_t+t)*prop.lat_spin+s].real());
-                //    printf("dest=%f\n",prop[(x*prop.lat_t+t)*prop.lat_spin*prop.lat_spin+(i*prop.lat_spin)+s].real());
+                //
+                //
             }
 }
 
@@ -281,11 +281,11 @@ int CG(lattice_fermi src, lattice_fermi &dest, lattice_gauge U, const double mas
     for (int i = 0; i < src.size; i++)
     {
         r0[i] = src[i] - r0[i];
+        // std::cout << r0[i] << endl;
     }
     for (int f = 1; f < max; f++)
     {
 
-        printf("f=%i\n", f);
         std::complex<double> rho;
         rho = vector_p(r0, r0);
 
@@ -301,23 +301,20 @@ int CG(lattice_fermi src, lattice_fermi &dest, lattice_gauge U, const double mas
             {
                 P[i] = z0[i];
             }
-            printf("P=%f\n", norm_2(P));
         }
         else
         {
             beta = rho / rho1;
-            printf("beta=%f\n", beta);
+
             for (int i = 0; i < P.size; i++)
                 P[i] = z0[i] + beta * P[i];
-            printf("P=%f\n", norm_2(P));
         }
         Dslash2(P, qq, U, mass, false);
-        printf("d_qq=%f\n", norm_2(qq));
+
         Dslash2(qq, q, U, mass, true);
-        printf("q=%f\n", norm_2(q));
+
         aphi = rho / vector_p(P, q);
-        printf("d_q=%f\n", vector_p(P, q));
-        printf("aphi=%f\n", aphi);
+
         for (int i = 0; i < dest.size; i++)
             dest[i] = dest[i] + aphi * P[i];
         for (int i = 0; i < r1.size; i++)
@@ -326,7 +323,7 @@ int CG(lattice_fermi src, lattice_fermi &dest, lattice_gauge U, const double mas
             r0[i] = r0[i] - aphi * q[i];
         if (norm_2(r0) < 1e-12)
         {
-            printf("convergence recedul=1e-5\n");
+            std::cout << f << endl;
             return 0;
         }
     } // for (f) end
@@ -335,10 +332,12 @@ int CG(lattice_fermi src, lattice_fermi &dest, lattice_gauge U, const double mas
 
 int main()
 {
+    clock_t start = clock();
+
     // gird distance
-    int nx = 4;
-    int nt = 4;
-    int ns = 2;
+    int nx = 40;
+    int nt = 40;
+    int ns = 4;
     int nd = 2;
     double mass = 1;
 
@@ -364,24 +363,23 @@ int main()
 
     Dslash2(src, ssrc, U, mass, true);
     CG(ssrc, dest, U, mass, 1000);
-    Dslash2(src1, ssrc, U, mass, true);
-    CG(ssrc, dest_1, U, mass, 1000);
+    // Dslash2(src1, ssrc, U, mass, true);
+    // CG(ssrc, dest_1, U, mass, 1000);
     // Dslash2(dest,ssrc,U,mass,false);
     fermi_to_prop(dest, prop, 0);
     // fermi_to_prop(dest_1,prop,1);
 
-    for (int x = 0; x < dest.lat_x; x++)
-        for (int t = 0; t < dest.lat_t; t++)
-            for (int s = 0; s < dest.lat_spin; s++)
-            {
-                //    printf("dest=%f\n",prop[(x*prop.lat_t+t)*prop.lat_spin*prop.lat_spin+(0*prop.lat_spin)+s].real());
-            }
+    clock_t end = clock();
+    cout
+        // << "rank:"
+        // << rank
+        << "################"
+        << "time cost:"
+        << (double)(end - start) / CLOCKS_PER_SEC
+        << "s"
+        << endl;
+    // MPI_Init(NULL, NULL);
 
-    // printf("s1=%f\n",s1.real());
-
-    // printf("norm_propagator0=%f\n",norm_2(dest));
-    printf("norm_propagator1=%f\n", norm_2(prop));
-    // printf("norm_src-propagator=%.10e\n",norm_2(ssrc-src));
-    // printf("dslash_1=%f\n",norm_2(ssrc));
-    // printf("dslash_2=%f\n",norm_2(dest));
+    // MPI_Finalize();
+    return 0;
 }

@@ -5208,4 +5208,3 @@ int dslash_g5(double *src, double *dest, double *U_x, double *U_y, double *U_z, 
     return 0;
 
 }
-

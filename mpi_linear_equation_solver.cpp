@@ -1,4 +1,4 @@
-#include <mpi.h>
+#include </beegfs/home/zhangxin/lib/openmpi-4.1.2/mpi.h>
 #include <iostream>
 #include <vector>
 

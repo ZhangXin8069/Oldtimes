@@ -1,12 +1,11 @@
 #include "zx_h.h"
-#include <vector>
-
-class biCGstabX 
+#include "mpi.h"
+class biCGstabX
 // Stable Biconjugate Gradient Method
 {
 public:
     biCGstabX(int max4loop = 10,
-              int nx = 4,
+              int nx = 3,
               int nt = 4,
               int ns = 2,
               float mass = 0.1,
@@ -46,16 +45,10 @@ public:
             wi = wi1;
         };
     };
-    void del4biCGstabX(biCGstabX *poit)
+    ~biCGstabX()
     {
-        poit = NULL;
-        delete poit;
-    };
-    void del4values2out(values2out *poit)
-    {
-        poit = NULL;
-        delete poit;
-    };
+        del4biCGstabX(this);
+    }
 
 protected:
     int max4loop;
@@ -182,14 +175,17 @@ protected:
             value4dest(i) = dest[i];
         };
     };
+    void del4biCGstabX(biCGstabX *poit)
+    {
+        poit = NULL;
+        delete poit;
+    };
 };
 int main()
 {
-//     biCGstab bi;
-//     bi.Run();
-//     bi.del4biCGstab(&bi);
+    //     biCGstab bi;
+    //     bi.Run();
     biCGstabX bi;
     bi.Run();
-    bi.del4biCGstabX(&bi);
     return 0;
 };

@@ -10,7 +10,7 @@ class biCGstab
 public:
     biCGstab(int max4loop = 10,
              int nu4dim = 2,
-             float min4diff = 1e-4,
+             float min4diff = 1e-5,
              MatrixXcd *poit4A = NULL,
              VectorXcd *poit4b = NULL)
     {
@@ -165,7 +165,7 @@ protected:
 };
 int main()
 {
-    biCGstab bi(1e5, 34, 1e-5);
+    biCGstab bi(1e5, 1, 1e-5);
     bi.Run();
     biCGstab::values2out values = bi._values2out;
     cout << values.diff << endl;
