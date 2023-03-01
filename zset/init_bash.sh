@@ -1,9 +1,8 @@
 path=$(cd "$(dirname $0)";pwd)
 p_path=$(cd $path ;cd ../;pwd)
-log_path=${path}/alias_log.txt
-rm $log_path
+echo '# >>> zhangxin alias >>>' >> ~/.bashrc
 for i in $(cd $p_path;ls zbash;)
 do
-	echo "alias ${i}='bash ${p_path}/zbash/${i}'" >> $log_path
+	echo "alias ${i}='bash ${p_path}/zbash/${i}'" >> ~/.bashrc
 done
-bash $log_pathe
+echo '# <<< zhangxin alias <<<' >> ~/.bashrc
