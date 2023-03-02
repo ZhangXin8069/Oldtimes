@@ -1,7 +1,3 @@
-content="~/content/"
-zbash="${content}zbash/"
-mkdir -p zbash
-mv 'z*\.sh' $zbash
-cp ~/.bashrc $zbash	
-echo "hao" >> ~/.bashrc
-source ~/.bashrc
+mkdir -p ~/content/zbash 
+mv ~content/'z*\.sh' ~/content/zbash 
+cp ~/.bashrc ~/content/zset	
