@@ -1,7 +1,1 @@
-content="~/content/"
-zbash="${content}zbash/"
-mkdir -p zbash
-mv 'z*\.sh' $zbash
-cp ~/.bashrc $zbash	
-echo "hao" >> ~/.bashrc
-source ~/.bashrc
+cd ~/content && mkdir -p zbash && mv z*\.sh 'zbash' && cp ~/.bashrc 'zbash'$(date "+%Y-%m-%d-%H-%M-%S")	
