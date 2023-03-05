@@ -32,7 +32,7 @@ public:
     void dslash(ComplexVector &src, ComplexVector &dest)
     {
         dest.clean_0();
-        if (1)
+        if (0)
         {
             dslash_test(src, dest);
         }
@@ -69,7 +69,7 @@ public:
 private:
     void dslash_test(ComplexVector &src, ComplexVector &dest)
     {
-        dest = src * 0.2 + 1;
+        dest = src * 0.2;
     }
     void dslash_no_comm(ComplexVector &src, ComplexVector &dest, int &x)
     {

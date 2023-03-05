@@ -9,9 +9,10 @@ def staff(wo='原神芭芭拉',
 
     # se = input_set(se)
     url = change(wo, url)
-    html = gethtmlbypyppteer(url)
-    # html= gethtmlbyrequests(url)
+    # html = gethtmlbypyppteer(url)
+    html= gethtmlbyrequests(url)
     # html = gethtmlbyselenium(url)
+    print(html)
     downLoadjpg(wo, nu, html)
 
 
@@ -285,12 +286,12 @@ def polyFit(x=[], y=[], deg=1, text='', xlabel='', ylabel=''):
 #     if inspect.isfunction(obj):
 # print(name, str(obj))
 if __name__ == '__main__':
-    a = [40, 45, 50, 55, 60]
-    b = [0.39, 0.44, 0.49, 0.54, 0.58]
-    polyFit(a, b, 1)
-# staff(wo='原神草神')
+    # a = [40, 45, 50, 55, 60]
+    # b = [0.39, 0.44, 0.49, 0.54, 0.58]
+    # polyFit(a, b, 1)
+    staff(url="https://mooc1.chaoxing.com/mycourse/studentstudy?chapterId=525856741&courseId=223051398&clazzid=51632724&cpi=148132642&enc=f5fe688aa59592366a33ce1865c90697&mooc2=1&openc=115c0a2e9fc2cf2b51f8f28746aecfc2")
 # import numpy as np
-# news()
+    # news()
 # news()
 # panch()
 # import matplotlib.pyplot as plt

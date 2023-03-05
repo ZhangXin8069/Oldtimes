@@ -2,17 +2,17 @@
 int main()
 {
     MPI_Init(NULL, NULL);
-    int lattice_x(3*4*5), lattice_t(3*4*5), lattice_spin(2); // const lattice_spin=2
+    int lattice_x(60), lattice_t(60), lattice_spin(2); // const lattice_spin=2
     int size(lattice_x * lattice_t * lattice_spin);
-    int MAX_ITER(1e1);
+    int MAX_ITER(1e3);
     double TOL(1e-5), start, end;
     ComplexVector b(size);
     ComplexVector U(size);
-    b.clean_1();
-    b[0] = 10;
-    U.clean_1();
-    // b.clean_rand();
-    // U.clean_rand();
+    // b.clean_1();
+    // b[0] = 10;
+    // U.clean_1();
+    b.clean_rand();
+    U.clean_rand();
     double mass(1);
     bool dag(true);
     start = MPI_Wtime();
